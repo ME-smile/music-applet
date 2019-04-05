@@ -12,32 +12,6 @@
         nickName: 'Hello',
         avatarUrl: '/static/images/logo@3x.png'
       }
-    },
-    methods: {
-      auth () {
-        wx.getSetting({
-          success (res) {
-            if (!res.authSetting['scope.userInfo']) {
-              wx.authorize({
-                scope: 'scope.userInfo',
-                success () {
-                  wx.getUserInfo({
-                    success (res) {
-                      const userInfo = res.userInfo
-                      this.nickName = userInfo.nickName
-                      this.avatarUrl = userInfo.avatarUrl
-                    }
-                  })
-                }
-              })
-            }
-          }
-        })
-      }
-    },
-    beforeMount () {
-      // 是否允许获取用户头像和昵称
-      this.auth()
     }
   }
 </script>
