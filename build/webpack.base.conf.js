@@ -49,7 +49,8 @@ let baseWebpackConfig = {
       '@': resolve('src'),
       'stylus':resolve('src/common/stylus'),
       'common': resolve('src/common'),
-      'components': resolve('src/components')
+      'components': resolve('src/components'),
+      'api': resolve('src/api')
     },
     symlinks: false,
     aliasFields: ['mpvue', 'weapp', 'browser'],

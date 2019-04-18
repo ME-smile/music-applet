@@ -14,21 +14,21 @@
   @import "~common/stylus/mixin"
   .header
     position: relative
-    height: 44px
+    height: 88rpx
     text-align: center
     color: $color-theme
     font-size: 0
     .icon
       display: inline-block
       vertical-align: top
-      margin-top: 6px
-      width: 30px
-      height: 32px
-      margin-right: 9px
-      background-size: 30px 32px
+      margin-top: 12rpx
+      width: 60rpx
+      height: 64rpx
+      margin-right: 18rpx
+      background-size: 60rpx 64rpx
     .text
       display: inline-block
       vertical-align: top
-      line-height: 44px
+      line-height: 88rpx
       font-size: $font-size-large
 </style>

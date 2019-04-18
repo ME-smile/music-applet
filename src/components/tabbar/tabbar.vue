@@ -1,17 +1,17 @@
 <template>
   <div class="tab">
-    <router-link tag="div" class="tab-item" to="/recommend">
+    <navigator url="/pages/index/main" class="tab-item" hover-class="router-link-active">
       <span class="tab-link">推荐</span>
-    </router-link>
-    <router-link tag="div" class="tab-item" to="/singer">
+    </navigator>
+    <navigator url="/pages/singer/main" class="tab-item" hover-class="router-link-active">
       <span class="tab-link">歌手</span>
-    </router-link>
-    <router-link tag="div" class="tab-item" to="/rank">
+    </navigator>
+    <navigator url="/pages/charts/main" class="tab-item" hover-class="router-link-active">
       <span class="tab-link">排行</span>
-    </router-link>
-    <router-link tag="div" class="tab-item" to="/search">
+    </navigator>
+    <navigator url="/pages/search/main" class="tab-item" hover-class="router-link-active">
       <span class="tab-link">搜索</span>
-    </router-link>
+    </navigator>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -22,6 +22,7 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   .tab
+    position: relative
     display: flex
     height: 44px
     line-height: 44px
