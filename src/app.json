@@ -2,6 +2,7 @@
   "pages": [
     "pages/index/main",
     "pages/singer/main",
+    "pages/singerDetail/main",
     "pages/logs/main",
     "pages/counter/main"
   ],

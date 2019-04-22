@@ -1,21 +1,19 @@
 <template>
-  <scroll-view class="listview">
+  <scroll-view class="listview" style="height:calc(100vh);" scroll-y="true" :scroll-into-view="groupID" @scroll="onSingerGroupScroll" :scroll-top="scrollTop">
     <ul>
-      <li v-for="(group,index) of singerList" :key="group.title" class="list-group">
+      <li v-for="(group,index) of singerList" :key="group.title" class="list-group" :id="'group'+index">
         <h2 class="list-group-title">{{group.title}}</h2>
         <ul>
-          <li class="list-group-item" v-for="(item,i) of group.singers" :key="item.id">
+          <li class="list-group-item" v-for="(item,i) of group.singers" :key="item.id" @tap="selectItem(item)">
             <img class="avatar" :src="item.avatar">
             <span class="name">{{item.name}}</span>
           </li>
         </ul>
       </li>
     </ul>
-    <div class="alphabet">
+    <div class="alphabet" @touchstart="handlerStart" @touchmove="handlerMove">
       <ul>
-        <li v-for="(item,index) of alphabet" :key="index" 
-          class="item"
-          :class="{'current' : currentIndex===index}">
+        <li v-for="(item,index) of alphabet" :key="index" :data-index="index"  :class="[currentIndex===index?'active':'item']">
           {{item}}
         </li>
       </ul>
@@ -24,16 +22,23 @@
 </template>
 <script type="text/ecmascript-6">
   import {getSingerList} from 'api/singer'
+  const ANCHOR_HEIGHT = 36
   export default {
     name: 'listview',
     data () {
       return {
         singerList: [],
-        alphabet: []
+        alphabet: [],
+        currentIndex: 0,
+        groupID: ''
       }
     },
     created () {
+      this.touch = {}
       this._getSingerList()
+      setTimeout(() => {
+        this._calculateHeight()
+      }, 300)
     },
     methods: {
       _getSingerList () {
@@ -43,6 +48,47 @@
             return group.title.substring(0, 1)
           })
         })
+      },
+      _calculateHeight () {
+        let groupHeight = []
+        wx.createSelectorQuery()
+          .selectAll('.list-group')
+          .boundingClientRect()
+          .exec(function (res) {
+            let height = 0
+            res[0].forEach(function (obj) {
+              height += obj.height
+              groupHeight.push(height)
+            })
+          })
+        this.groupHeight = groupHeight
+      },
+      handlerStart (e) {
+        this.touch.anchorIndex = e.mp.target.dataset.index
+        this.groupID = 'group' + this.touch.anchorIndex
+        this.touch.startY = e.mp.touches[0].pageY
+      },
+      handlerMove (e) {
+        this.touch.endY = e.mp.touches[0].pageY
+        let delta = (this.touch.endY - this.touch.startY) / ANCHOR_HEIGHT | 0
+        this.touch.anchorIndex += delta
+        this.groupID = 'group' + this.touch.anchorIndex
+      },
+      onSingerGroupScroll (e) {
+        let groupHeight = this.groupHeight
+        let scrollTop = e.mp.detail.scrollTop
+        for (let i = 0; i < groupHeight.length - 1; i++) {
+          let height1 = groupHeight[i]
+          let height2 = groupHeight[i + 1]
+          if (scrollTop >= height1 && scrollTop < height2) {
+            this.currentIndex = i + 1
+            return
+          }
+          this.currentIndex = 0
+        }
+      },
+      selectItem (item) {
+        this.$emit('select', item)
       }
     }
   }
@@ -94,7 +140,7 @@
         line-height: 1
         color: $color-text-l
         font-size: $font-size-small
-        &.current
+        .active
           color: $color-theme
     .list-fixed
       position: absolute
@@ -113,5 +159,4 @@
       width: 100%
       top: 50%
       transform: translateY(-50%)
-
 </style>

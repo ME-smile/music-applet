@@ -4,7 +4,7 @@
         <m-header></m-header>
         <tab-bar></tab-bar>
     </div>
-    <listview></listview>
+    <listview @select="selectSinger"></listview>
   </div>
 </template>
 
@@ -12,12 +12,25 @@
   import MHeader from 'components/m-header/m-header'
   import TabBar from 'components/tabbar/tabbar'
   import listview from 'components/listview/listview'
+  import {mapMutations} from 'vuex'
   export default{
     name: 'singer',
     components: {
       MHeader,
       TabBar,
       listview
+    },
+    methods: {
+      selectSinger (singer) {
+        let url = `/pages/singerDetail/main?id=${singer.id}`
+        this.setSinger(singer)
+        wx.navigateTo({
+          url
+        })
+      },
+      ...mapMutations({
+        setSinger: 'SET_SINGER'
+      })
     }
   }
 </script>
