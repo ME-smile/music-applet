@@ -11,17 +11,39 @@
   </div>
 </template>
 <script type="text/ecmascript-6">
+  import {mapGetters} from 'vuex'
+  import {getSingerDetail} from 'api/singer'
   export default {
     props: {
-      songs: {
-        type: Array,
-        default: []
+      singerID: {
+        type: String,
+        default: ''
       }
     },
     data () {
       return {
-        msg: 'hahahah'
+        songs: []
       }
+    },
+    onLoad () {
+      this._getSingerDetail()
+    },
+    onUnload () {
+      this.songs = [] // 清除数据
+    },
+    methods: {
+      _getSingerDetail () {
+        console.log(this.singer.id)
+        getSingerDetail(this.singer.id).then((res) => {
+          this.songs = res.songs
+          console.log('我被执行了')
+        })
+      }
+    },
+    computed: {
+      ...mapGetters([
+        'singer'
+      ])
     }
   }
 </script>

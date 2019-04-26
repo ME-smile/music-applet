@@ -7,30 +7,31 @@
     <div class="bgImage" :style="bgStyle">
       <div class="play-wrapper">
         <div class="play">
-          <i class="icon-play" v-show="songs.length"></i>
+          <i class="icon-play"></i>
           <span class="text">随机播放全部</span>
         </div>
       </div>
-      <div class="filter" ref="filter"></div>
+      <div class="filter"></div>
     </div>
-    <div class="bg-layer" ref="layer"></div>
-    <scroll-view class="list" scroll-y animation="scrollAnimation">
+    <div class="bgLayer" :style="scrollEffect"></div>
+    <scroll-view class="list" scroll-y="true" :style="scrollTop">
       <div class="song-list-wrapper">
-        <song-list :songs="songs"></song-list>
+        <song-list></song-list>
       </div>
     </scroll-view>
   </div>
 </template>
 <script type="text/ecmascript-6">
   import SongList from 'components/song-list/song-list'
+  const RESERVED_HEIGHT = 40
   export default {
     props: {
       bgImage: {
         type: String,
         default: ''
       },
-      songs: {
-        type: Array,
+      singerID: {
+        type: String,
         default: ''
       },
       title: {
@@ -38,16 +39,56 @@
         default: ''
       }
     },
+    data () {
+      return {
+        bgImgHeight: 0,
+        scrollY: 0,
+        scrollEffect: ''
+      }
+    },
     computed: {
       bgStyle () {
         return `background-image:url(${this.bgImage})`
+      },
+      scrollTop () {
+        return `top:${this.bgImgHeight}px`
       }
+    },
+    onLoad () {
+      this._getBgImgHeight()
     },
     methods: {
       back () {
         wx.navigateBack({
           url: '/pages/singer/main'
         })
+      },
+      _getBgImgHeight () {
+        const that = this
+        wx.createSelectorQuery()
+          .select('.bgImage')
+          .boundingClientRect(function (rect) {
+            that.bgImgHeight = rect.height
+          }).exec()
+      },
+      touchMoveHandler (e) {
+        console.log(e.mp.touches[0].pageY)
+      }
+      // scrollHandler (pos) {
+      //   console.log(pos)
+      //   const that = this
+      //   wx.createSelectorQuery()
+      //     .select('.bgImage')
+      //     .boundingClientRect(function (rect) {
+      //       that.scrollY = pos.mp.detail.scrollTop
+      //     }).exec()
+      // }
+    },
+    watch: {
+      scrollY (newY) {
+        this.minTranslateY = -this.bgImgHeight + RESERVED_HEIGHT
+        let tranlateY = Math.max(this.minTranslateY, newY)
+        this.scrollEffect = `transform:translateY(${tranlateY}px)`
       }
     },
     components: {
@@ -95,7 +136,6 @@
       padding-top: 70%
       transform-origin: top
       background-size: cover
-      z-index: 2
       .play-wrapper
         position: absolute
         bottom: 20px
@@ -128,16 +168,21 @@
         height: 100%
         background: rgba(7, 17, 27, 0.4)
 
-    .bg-layer
+    .bgLayer
       position: relative
       height: 100%
       background: $color-background
     .list
       position: fixed
-      top: 262px
+      top: 0
       bottom: 0
       width: 100%
       background: $color-background
       .song-list-wrapper
         padding: 20px 30px
- </style>
+      .loading-container
+        position: absolute
+        width: 100%
+        top: 50%
+        transform: translateY(-50%)
+</style>

@@ -1,17 +1,17 @@
 <template>
   <div class="tab">
-    <navigator url="/pages/index/main" class="tab-item" hover-class="router-link-active">
+    <a href="/pages/index/main" class="tab-item" hover-class="router-link-active">
       <span class="tab-link">推荐</span>
-    </navigator>
-    <navigator url="/pages/singer/main" class="tab-item" hover-class="router-link-active">
+    </a>
+    <a href="/pages/singer/main" class="tab-item" hover-class="router-link-active">
       <span class="tab-link">歌手</span>
-    </navigator>
-    <navigator url="/pages/charts/main" class="tab-item" hover-class="router-link-active">
+    </a>
+    <a href="/pages/charts/main" class="tab-item" hover-class="router-link-active">
       <span class="tab-link">排行</span>
-    </navigator>
-    <navigator url="/pages/search/main" class="tab-item" hover-class="router-link-active">
+    </a>
+    <a href="/pages/search/main" class="tab-item" hover-class="router-link-active">
       <span class="tab-link">搜索</span>
-    </navigator>
+    </a>
   </div>
 </template>
 <script type="text/ecmascript-6">
